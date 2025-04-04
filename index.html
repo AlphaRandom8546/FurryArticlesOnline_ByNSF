@@ -1,73 +1,103 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8">
-    <title>我的个人网站</title>
-  </head>
-  <body>
-    <!-- 上 -->
-    <div style="
-      display: block;
-      background: #ffffff;
-      text-align: center;
-      /* padding: 10px; */
-      font-size: 20px;
-      font-family: 等距更纱黑体 SC;
-      font-style: italic;
-      font-weight: bold;
-      margin-block-start: 30px;
-      margin-block-end: 5px;
-    ">
-        <img src="NSF.png" alt="站长头像" width="80px" height="auto"><p>Non Sono Furry</p>
-    </div>
-    <!-- 分割符 -->
-    <div style="
-        background-color: #f1f1f1;
-        height: 1px;
-    "></div>
-    <!-- 中 -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文本存储器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <!-- 推荐书目 -->
-    <div style="
-      display: block;
-      max-width: 700px;
-      margin-block-start: 10px;
-      margin-block-end:10px;
-      padding: 15px;
-      line-height: 1.7;
-      font-family: 等距更纱黑体 SC;
-    ">
-        <h2>推荐书目</h2>
-        <a>推荐书目 1</a>
-        <a>推荐书目 2</a>
-        <a>推荐书目 3</a>
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            position: relative;
+            text-align: center;
+        }
+
+        #inputField {
+            width: 200px;
+            padding: 12px 20px;
+            font-size: 18px;
+            border: 2px solid #3498db;
+            border-radius: 25px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        #inputField:focus {
+            width: 250px;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        #displayText {
+            font-size: 24px;
+            color: #2c3e50;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <input type="text" id="inputField" placeholder="输入文本...">
+        <div id="displayText"></div>
     </div>
 
-    <!-- 我的书架 -->
-    <div style="
-        display: block;
-        max-width: 700px;
-        margin-block-start: 10px;
-        margin-block-end:10px;
-        padding: 15px;
-        line-height: 1.7;
-        font-family: 等距更纱黑体 SC;
-    ">
-        <h2>我的书架</h2>
-        <a>收藏书目 1</a>
-        <a>收藏书目 2</a>
-        <a>收藏书目 3</a>
-    </div>
-    <!-- 下 -->
-    <div style="
-        background-color: #f1f1f1;
-        text-align: center;
-        padding: 40px;
-        font-size: 12px;
-        font-family: 等距更纱黑体 SC;
-    ">
-        <p>我的网站</p>
-        <a href="">关于我们</a>
-    </div>
+    <script>
+        // 初始化元素引用
+        const inputField = document.getElementById('inputField');
+        const displayText = document.getElementById('displayText');
+
+        // 页面加载时检查本地存储
+        window.addEventListener('load', () => {
+            const savedText = localStorage.getItem('userText');
+            if (savedText) {
+                displayText.textContent = savedText;
+                displayText.style.display = 'block';
+                inputField.style.display = 'none';
+            }
+        });
+
+        // 键盘事件监听
+        inputField.addEventListener('keydown', (e) => {
+            if (e.key.toLowerCase() === 'enter') {
+                const text = inputField.value.trim();
+                if (text) {
+                    // 保存到本地存储并显示
+                    localStorage.setItem('userText', text);
+                    displayText.textContent = text;
+                    displayText.style.display = 'block';
+                    inputField.style.display = 'none';
+                    inputField.value = '';
+                }
+            }
+        });
+
+        // 全局键盘事件监听（用于Delete键）
+        document.addEventListener('keydown', (e) => {
+            if (e.key.toLowerCase() === 'delete') {
+                // 清除本地存储并重置界面
+                localStorage.removeItem('userText');
+                displayText.style.display = 'none';
+                inputField.style.display = 'block';
+                inputField.value = '';
+                inputField.focus();
+            }
+        });
+    </script>
 </body>
 </html>
